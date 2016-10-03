@@ -25,26 +25,55 @@ var restify = require('./lib/interfaces/restify');
 var uncaughtException = require('./lib/interfaces/uncaught.js');
 var createLogger = require('./lib/logger.js');
 
+/** @record */
+var ServiceContext = function(){};
 /**
- * @typedef ConfigurationOptions
- * @type Object
- * @property {String} [projectId] - the projectId of the project deployed
- * @property {String} [keyFilename] - path to a key file to use for an API key
- * @property {String|Number} logLevel - a integer between and including 0-5 or a
- *  decimal representation of an integer including and between 0-5 in String
- *  form
- * @property {String} [key] - API key to use for communication with the service
- * @property {uncaughtHandlingEnum}
- *  [onUncaughtException=uncaughtHandlingEnum.ignore] - one of the uncaught
- *  handling options
- * @property {Object} [serviceContext] - the service context of the application
- * @property {String} [serviceContext.service] - the service the application is
- *  running on
- * @property {String} [serviceContext.version] - the version the hosting
- *  application is currently labelled as
+ * The service the application is running on.
+ * @type {string}
  */
-
+ServiceContext.prototype.service;
 /**
+ * The version the hosting application is currently labelled as.
+ * @type {string}
+ */
+ServiceContext.prototype.version;
+
+/** @record */
+var ConfigurationOptions = function(){};
+/**
+ * The projectId of the project deployed.
+ * @type {string}
+ */
+ConfigurationOptions.prototype.projectId;
+/**
+ * Path to a key file to use for an API key
+ * @type {string}
+ */
+ConfigurationOptions.prototype.keyFileName;
+/**
+ * An integer between and including 0-5 or a decimal representation of an
+ * integer including and between 0-5 in String form.
+ * @type {string|number}
+ */
+ConfigurationOptions.prototype.logLevel;
+/**
+ * API key to use for communication with the service
+ * @type {string}
+ */
+ConfigurationOptions.prototype.key;
+/**
+ * One of the uncaught handling options.
+ * Default if undefined is {@code onUncaughtException=uncaughtHandlingEnum.ignore}
+ * @type {uncaughtHandlingEnum}
+ */
+ConfigurationOptions.prototype.onUncaughtException;
+/**
+ * The service context of the application.
+ * @type {!ServiceContext}
+ */
+ConfigurationOptions.prototype.serviceContext;
+
+/*
  * @typedef ApplicationErrorReportingInterface
  * @type Object
  * @property {Object} hapi - The hapi plugin for Stackdriver Error Reporting
@@ -61,7 +90,6 @@ var createLogger = require('./lib/logger.js');
  * this function will also return an interface which can be used manually via
  * the `report` function property, with hapi via the `hapi` object property or
  * with express via the `express` function property.
- * @function initConfiguration
  * @param {ConfigurationOptions} initConfiguration - the desired project/error
  *  reporting configuration
  * @returns {ApplicationErrorReportingInterface} - The error reporting interface
